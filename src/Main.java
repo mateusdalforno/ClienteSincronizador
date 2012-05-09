@@ -7,6 +7,6 @@
  *
  * @author Mateus
  */
-public interface Main {
+public class Main {
     
 }
