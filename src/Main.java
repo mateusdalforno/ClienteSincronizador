@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class Main {
 
     public static void main(String[] args) {
-        long rtt = System.currentTimeMillis();
+        long tmin = 97823453623l;
         Relogio relogio = new Relogio();
         
         try {
@@ -30,17 +30,17 @@ public class Main {
             Receptor receptor = new Receptor(clientSocket);
             
             emissor.enviar("");
-            Date envio = relogio.getDate();
-            System.out.println(envio.getTime());
+            long envio = relogio.getTime();
+            System.out.println("Data de envio: " + envio);
             receptor.receber();
-            Date recebimento = relogio.getDate();
-            System.out.println(recebimento.getTime());
-            long rttEstimando = recebimento.getTime() - envio.getTime();
+            long recebimento = relogio.getTime();
+            System.out.println("Data de recebimento: " + recebimento);
+            long rttEstimando = recebimento - envio;
             
-            if (rttEstimando < rtt) {
-                rtt = rttEstimando;
+            if (rttEstimando < tmin) {
+                tmin = rttEstimando;
             }
-            System.out.println(rtt);
+            System.out.println("Tempo de resposta do servidor: " + tmin);
             
             clientSocket.close();
         } catch (SocketException ex) {
