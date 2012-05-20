@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package core;
 
 import java.net.InetAddress;
@@ -21,16 +17,16 @@ public class Conexao {
         this.inetIp = inetIp;
         this.ip = inetIp.getHostAddress();
     }
-    
+
     public Conexao(String ip) throws UnknownHostException {
         this.ip = ip;
         this.inetIp = InetAddress.getByName(ip);
     }
-    
+
     public static void setIP_SERVIDOR(String ip) {
         IP_SERVIDOR = ip;
     }
-    
+
     public InetAddress getConexaoServidor() {
         return this.inetIp;
     }

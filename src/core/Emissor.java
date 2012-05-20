@@ -1,12 +1,11 @@
+package core;
 
-import core.Conexao;
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
-/*
- * To change this template, choose Tools | Templates and open the template in
- * the editor.
- */
 /**
  *
  * @author Bruno
@@ -21,7 +20,7 @@ public class Emissor {
 
     public void enviar(String msg) throws SocketException, UnknownHostException, IOException {
         Conexao con = new Conexao(Conexao.IP_SERVIDOR);
-        byte[] sendData = new byte[0];
+        byte[] sendData = new byte[1024];
         sendData = msg.getBytes();
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, con.getConexaoServidor(), 9876);
         clientSocket.send(sendPacket);
