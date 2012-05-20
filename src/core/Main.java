@@ -1,8 +1,12 @@
 package core;
 
 /**
+ * Classe emissor Main que inicializa o programa cliente
  *
- * @author Mateus
+ * @author Bruno Vicelli
+ * @author Mateus Henrique Dal Forno
+ * @author Thiago Cassio Krug
+ * @version 1.0
  */
 public class Main {
 

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package core;
 
 import java.io.BufferedReader;
@@ -11,8 +7,14 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 /**
+ * Classe UDPClient que estabele o protocolo de comunicação com o servidor. No
+ * caso a comunicação funciona sobre o protocolo UDP (User Datagram Protocol, ou
+ * protocolo de datagrama de usuários)
  *
- * @author thiago
+ * @author Bruno Vicelli
+ * @author Mateus Henrique Dal Forno
+ * @author Thiago Cassio Krug
+ * @version 1.0
  */
 public class UDPClient {
 

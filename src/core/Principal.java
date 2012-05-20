@@ -10,8 +10,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Classe Principal que contém os métodos principais para o funcionamento do
+ * programa de sincronização de relógios
  *
- * @author thiago
+ * @author Bruno Vicelli
+ * @author Mateus Henrique Dal Forno
+ * @author Thiago Cassio Krug
+ * @version 1.0
  */
 public class Principal {
 
@@ -29,6 +34,10 @@ public class Principal {
         calculo = new Calculo();
     }
 
+    /**
+     * Método responsável por inicializar a configuração para a comunicação com
+     * o servidor
+     */
     public void inicializaConfiguração() {
         System.out.println("Insira o número do ip do servidor:");
         try {
@@ -39,6 +48,10 @@ public class Principal {
         }
     }
 
+    /**
+     * Método utilizado para o usuário informar o número de requisições que
+     * devem ser feias ao servidor para co cáculo do tempo mínimo
+     */
     public void inserirNumeroPedido() {
         boolean numInteiro = false;
         System.out.println("Insira a quantidade de pedidos que você deseja enviar ao servidor:");
@@ -61,26 +74,30 @@ public class Principal {
         }
     }
 
+    /**
+     * Método responsável por pegar o menor tempo dentre as requisições enviadas
+     * ao servidor
+     */
     public void descobrirTMin() {
         try {
             for (int i = 0; i < numPedidos; i++) {
                 DatagramSocket clientSocket = new DatagramSocket();
                 Emissor emissor = new Emissor(clientSocket);
                 Receptor receptor = new Receptor(clientSocket);
-                
+
                 emissor.enviar("");
                 long envio = relogio.getTime();
                 System.out.println("Data de envio: " + envio);
-                
+
                 receptor.receber();
                 long recebimento = relogio.getTime();
                 System.out.println("Data de recebimento: " + recebimento);
-                
+
                 long rttEstimando = recebimento - envio;
                 System.out.println("Tempo de resposta do servidor: " + rttEstimando);
-                
+
                 calculo.RTTMenor(rttEstimando);
-                
+
                 clientSocket.close();
             }
         } catch (SocketException ex) {
@@ -91,8 +108,7 @@ public class Principal {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void solicitaHorario() {
-        
     }
 }
