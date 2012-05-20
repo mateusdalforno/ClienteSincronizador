@@ -91,6 +91,9 @@ public class Principal {
      * representa a hora oficial
      */
     public synchronized void descobrirTMin() {
+        long horaClinte = relogio.getTime();
+        System.out.println("\nA hora do cliente é: " + DateParser.simpleDateFormat("dd/MM/yyyy  HH:mm:ss:SSSS", horaClinte) + "\n");
+
         try {
             for (int i = 0; i < numPedidos; i++) {
                 DatagramSocket clientSocket = new DatagramSocket();
@@ -105,11 +108,11 @@ public class Principal {
                 long recebimento = relogio.getTime();
                 System.out.println("Mensagem recebida em : " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", recebimento));
 
-                long rttEstimando = recebimento - envio;
-                System.out.println("Tempo de resposta do servidor: " + rttEstimando + "ms\n");
+                long rttEstimado = recebimento - envio;
+                System.out.println("Tempo de resposta do servidor: " + rttEstimado + "ms\n");
                 System.out.println("-------------------------------------------------------");
 
-                calculo.RTTMenor(rttEstimando);
+                calculo.RTTMenor(rttEstimado);
 
                 clientSocket.close();
             }
@@ -146,8 +149,11 @@ public class Principal {
 
             horaServidor = horaServidor.trim();
 
-            long horaCerta = calculo.calcularHorario(Long.valueOf(horaServidor), rttEstimando);
+            long horaS = Long.valueOf(horaServidor);
+            long horaCerta = calculo.calcularHorario(horaS, rttEstimando);
             relogio.setTime(horaCerta);
+            String hServidor = DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", horaS);
+            System.out.println("Cálculo = " + hServidor + " + " + rttEstimando + " / 2 - " + calculo.getTMin() + "\n");
             System.out.println("Hora sincronizada: ");
             System.out.println(DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", relogio.getDate()));
 

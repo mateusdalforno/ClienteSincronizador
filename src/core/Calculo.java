@@ -42,4 +42,13 @@ public class Calculo {
     public long calcularHorario(long dataServidor, long rtt) {
         return dataServidor + rtt / 2 - TMin;
     }
+
+    /**
+     * ´Método de retorno do TMin
+     * 
+     * @return TMin
+     */
+    public long getTMin() {
+        return TMin;
+    }
 }
