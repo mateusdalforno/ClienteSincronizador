@@ -4,9 +4,8 @@
  */
 package core;
 
-import java.net.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  *
@@ -14,17 +13,25 @@ import java.util.logging.Logger;
  */
 public class Conexao {
 
-    public void faz() {
-        try {
-            DatagramSocket socket = new DatagramSocket();
-            byte[] m = "teste".getBytes();
-            InetAddress host = InetAddress.getByName("localhost");
-            int port = 5588;
-            DatagramPacket request = new DatagramPacket(m, port);
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SocketException ex) {
-            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private InetAddress inetIp;
+    private String ip;
+    public static String IP_SERVIDOR = "";
+
+    public Conexao(InetAddress inetIp) {
+        this.inetIp = inetIp;
+        this.ip = inetIp.getHostAddress();
+    }
+    
+    public Conexao(String ip) throws UnknownHostException {
+        this.ip = ip;
+        this.inetIp = InetAddress.getByName(ip);
+    }
+    
+    public static void setIP_SERVIDOR(String ip) {
+        IP_SERVIDOR = ip;
+    }
+    
+    public InetAddress getConexaoServidor() {
+        return this.inetIp;
     }
 }

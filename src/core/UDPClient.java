@@ -17,15 +17,17 @@ import java.net.InetAddress;
 public class UDPClient {
 
     public static void main(String args[]) throws Exception {
+        String arg = "5";
         //for (int i = 0; i < Integer.valueOf(args[0]); i++) {
+        for (int i = 0; i < Integer.valueOf(arg); i++) {
             BufferedReader inFromUser =
                     new BufferedReader(new InputStreamReader(System.in));
             DatagramSocket clientSocket = new DatagramSocket();
-            InetAddress IPAddress = InetAddress.getByName("localhost");
+            InetAddress IPAddress = InetAddress.getByName("10.1.1.15");
             byte[] sendData = new byte[0];
             byte[] receiveData = new byte[0];
-            String sentence = inFromUser.readLine();
-            sendData = sentence.getBytes();
+            //String sentence = inFromUser.readLine();
+            //sendData = sentence.getBytes();
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
             clientSocket.send(sendPacket);
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
@@ -33,6 +35,6 @@ public class UDPClient {
             String modifiedSentence = new String(receivePacket.getData());
             System.out.println("FROM SERVER:" + modifiedSentence);
             clientSocket.close();
-        //}
+        }
     }
 }
