@@ -10,6 +10,11 @@ package core;
  */
 public class Main {
 
+    /**
+     * Método que dispara a iniciaização do programa
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Relogio relogio = new Relogio();
         Principal p = new Principal(relogio);

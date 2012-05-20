@@ -1,8 +1,8 @@
 package core;
 
-import conexao.Receptor;
-import conexao.Emissor;
 import conexao.Conexao;
+import conexao.Emissor;
+import conexao.Receptor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,7 +15,8 @@ import util.DateParser;
 
 /**
  * Classe Principal que contém os métodos principais para o funcionamento do
- * programa de sincronização de relógios
+ * programa de sincronização de relógios e que faz a sincronização com a hora
+ * certa do servidor
  *
  * @author Bruno Vicelli
  * @author Mateus Henrique Dal Forno
@@ -30,6 +31,12 @@ public class Principal {
     private int numPedidos;
     private Calculo calculo;
 
+    /**
+     * Método construtor que inicia as entradas do programa cliente e inicializa
+     * o relogio para o registro do tempo
+     *
+     * @param relogio
+     */
     public Principal(Relogio relogio) {
         isr = new InputStreamReader(System.in);
         br = new BufferedReader(isr);
@@ -54,7 +61,7 @@ public class Principal {
 
     /**
      * Método utilizado para o usuário informar o número de requisições que
-     * devem ser feias ao servidor para co cáculo do tempo mínimo
+     * devem ser feitas ao servidor
      */
     public void inserirNumeroPedido() {
         boolean numInteiro = false;
@@ -78,6 +85,11 @@ public class Principal {
         }
     }
 
+    /**
+     * Método que calcula o intervalo de tempo entre o horario de envio da
+     * mensagem e de retorno da mesma baseado no relógio local do cliente qe não
+     * representa a hora oficial
+     */
     public synchronized void descobrirTMin() {
         try {
             for (int i = 0; i < numPedidos; i++) {
@@ -87,14 +99,15 @@ public class Principal {
 
                 emissor.enviar("");
                 long envio = relogio.getTime();
-                System.out.println("Data de envio: " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", envio));
+                System.out.println("Mensagem enviada em: " + DateParser.simpleDateFormat("dd/MM/yyyy  HH:mm:ss:SSSS", envio));
 
                 receptor.receber();
                 long recebimento = relogio.getTime();
-                System.out.println("Data de recebimento: " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", recebimento));
+                System.out.println("Mensagem recebida em : " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", recebimento));
 
                 long rttEstimando = recebimento - envio;
-                System.out.println("Tempo de resposta do servidor: " + rttEstimando + "ms");
+                System.out.println("Tempo de resposta do servidor: " + rttEstimando + "ms\n");
+                System.out.println("-------------------------------------------------------");
 
                 calculo.RTTMenor(rttEstimando);
 
@@ -109,6 +122,10 @@ public class Principal {
         }
     }
 
+    /**
+     * Método que solicita a hora oficial do servidor e retorna com a hora
+     * sincronizada e chama o calculo do rtt
+     */
     public void solicitarHorario() {
         try {
             DatagramSocket clientSocket = new DatagramSocket();
@@ -117,19 +134,21 @@ public class Principal {
 
             emissor.enviar("");
             long envio = relogio.getTime();
-            System.out.println("Data de envio: " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", envio));
+            System.out.println("------- Cálculo do RTT -------");
+            System.out.println("Mensagem enviada em: " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", envio));
 
             String horaServidor = receptor.receber();
             long recebimento = relogio.getTime();
-            System.out.println("Data de recebimento: " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", recebimento));
+            System.out.println("Mensagem recebida em: " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", recebimento));
 
             long rttEstimando = recebimento - envio;
-            System.out.println("Tempo de resposta do servidor: " + rttEstimando + "ms");
+            System.out.println("Tempo de resposta do servidor: " + rttEstimando + "ms\n");
 
             horaServidor = horaServidor.trim();
 
             long horaCerta = calculo.calcularHorario(Long.valueOf(horaServidor), rttEstimando);
             relogio.setTime(horaCerta);
+            System.out.println("Hora sincronizada: ");
             System.out.println(DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", relogio.getDate()));
 
             clientSocket.close();
