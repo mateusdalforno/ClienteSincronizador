@@ -1,5 +1,6 @@
-package core;
+package conexao;
 
+import conexao.Conexao;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

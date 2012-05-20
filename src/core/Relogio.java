@@ -15,23 +15,19 @@ public class Relogio extends Thread {
 
     public Relogio() {
         execucao = true;
+        hora = new Date(System.currentTimeMillis());
         this.start();
     }
 
     @Override
     public void run() {
-        this.iniciaContagem();
-    }
-
-    public void iniciaContagem() {
-        hora = new Date(System.currentTimeMillis());
         while (execucao) {
             try {
                 Thread.sleep(1);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Relogio.class.getName()).log(Level.SEVERE, null, ex);
             }
-            hora.setTime(System.currentTimeMillis());
+            hora.setTime(hora.getTime()+1);
         }
     }
 
@@ -41,6 +37,10 @@ public class Relogio extends Thread {
 
     public long getTime() {
         return this.hora.getTime();
+    }
+    
+    public void setTime(long time) {
+        this.hora.setTime(time);
     }
 
     public void shutdown() {

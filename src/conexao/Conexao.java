@@ -1,4 +1,4 @@
-package core;
+package conexao;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

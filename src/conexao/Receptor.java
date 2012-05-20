@@ -1,4 +1,4 @@
-package core;
+package conexao;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

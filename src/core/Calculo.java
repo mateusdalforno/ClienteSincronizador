@@ -17,4 +17,8 @@ public class Calculo {
             TMin = num;
         }
     }
+    
+    public long calcularHorario(long dataServidor, long rtt) {
+        return dataServidor + rtt / 2 - TMin;
+    }
 }

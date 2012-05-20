@@ -1,13 +1,18 @@
 package core;
 
+import conexao.Receptor;
+import conexao.Emissor;
+import conexao.Conexao;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import util.DateParser;
 
 /**
  *
@@ -61,26 +66,26 @@ public class Principal {
         }
     }
 
-    public void descobrirTMin() {
+    public synchronized void descobrirTMin() {
         try {
             for (int i = 0; i < numPedidos; i++) {
                 DatagramSocket clientSocket = new DatagramSocket();
                 Emissor emissor = new Emissor(clientSocket);
                 Receptor receptor = new Receptor(clientSocket);
-                
+
                 emissor.enviar("");
                 long envio = relogio.getTime();
-                System.out.println("Data de envio: " + envio);
-                
+                System.out.println("Data de envio: " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", envio));
+
                 receptor.receber();
                 long recebimento = relogio.getTime();
-                System.out.println("Data de recebimento: " + recebimento);
-                
+                System.out.println("Data de recebimento: " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", recebimento));
+
                 long rttEstimando = recebimento - envio;
-                System.out.println("Tempo de resposta do servidor: " + rttEstimando);
-                
+                System.out.println("Tempo de resposta do servidor: " + rttEstimando + "ms");
+
                 calculo.RTTMenor(rttEstimando);
-                
+
                 clientSocket.close();
             }
         } catch (SocketException ex) {
@@ -91,8 +96,37 @@ public class Principal {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void solicitaHorario() {
-        
+
+    public void solicitarHorario() {
+        try {
+            DatagramSocket clientSocket = new DatagramSocket();
+            Emissor emissor = new Emissor(clientSocket);
+            Receptor receptor = new Receptor(clientSocket);
+
+            emissor.enviar("");
+            long envio = relogio.getTime();
+            System.out.println("Data de envio: " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", envio));
+
+            String horaServidor = receptor.receber();
+            long recebimento = relogio.getTime();
+            System.out.println("Data de recebimento: " + DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", recebimento));
+
+            long rttEstimando = recebimento - envio;
+            System.out.println("Tempo de resposta do servidor: " + rttEstimando + "ms");
+
+            horaServidor = horaServidor.trim();
+
+            long horaCerta = calculo.calcularHorario(Long.valueOf(horaServidor), rttEstimando);
+            relogio.setTime(horaCerta);
+            System.out.println(DateParser.simpleDateFormat("dd/MM/yyyy HH:mm:ss:SSSS", relogio.getDate()));
+
+            clientSocket.close();
+        } catch (SocketException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
