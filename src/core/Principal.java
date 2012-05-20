@@ -9,14 +9,18 @@ import java.io.InputStreamReader;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.DateParser;
 
 /**
+ * Classe Principal que contém os métodos principais para o funcionamento do
+ * programa de sincronização de relógios
  *
- * @author thiago
+ * @author Bruno Vicelli
+ * @author Mateus Henrique Dal Forno
+ * @author Thiago Cassio Krug
+ * @version 1.0
  */
 public class Principal {
 
@@ -34,6 +38,10 @@ public class Principal {
         calculo = new Calculo();
     }
 
+    /**
+     * Método responsável por inicializar a configuração para a comunicação com
+     * o servidor
+     */
     public void inicializaConfiguração() {
         System.out.println("Insira o número do ip do servidor:");
         try {
@@ -44,6 +52,10 @@ public class Principal {
         }
     }
 
+    /**
+     * Método utilizado para o usuário informar o número de requisições que
+     * devem ser feias ao servidor para co cáculo do tempo mínimo
+     */
     public void inserirNumeroPedido() {
         boolean numInteiro = false;
         System.out.println("Insira a quantidade de pedidos que você deseja enviar ao servidor:");
